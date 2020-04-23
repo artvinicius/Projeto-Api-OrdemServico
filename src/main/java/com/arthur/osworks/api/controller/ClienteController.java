@@ -3,6 +3,8 @@ package com.arthur.osworks.api.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +40,7 @@ public class ClienteController {
 		Optional<Cliente> cliente = clienteRepository.findById(clienteId);
 
 		if (cliente.isPresent()) {
-			return ResponseEntity.ok(cliente.get()); // Tratando erro caso o id do cliente não exista colocando código
-														// de status no cabeçalho da resposta 404
+			return ResponseEntity.ok(cliente.get()); // Tratando erro caso o id do cliente não exista colocando código de status no cabeçalho da resposta 404
 		}
 		return ResponseEntity.notFound().build(); // Retorna apenas 404 sem corpo nenhum
 
@@ -48,12 +49,12 @@ public class ClienteController {
 	// Cadastro de um cliente
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED) // Retornando o cabeçalho de created 201
-	public Cliente adicionar(@RequestBody Cliente cliente) {
+	public Cliente adicionar(@Valid @RequestBody Cliente cliente) {
 		return clienteRepository.save(cliente);
 	}
 
 	@PutMapping("/{clienteId}")
-	public ResponseEntity<Cliente> atualizar(@PathVariable Long clienteId, @RequestBody Cliente cliente) {
+	public ResponseEntity<Cliente> atualizar(@Valid @PathVariable Long clienteId, @RequestBody Cliente cliente) {
 
 		if (!clienteRepository.existsById(clienteId)) {
 			return ResponseEntity.notFound().build();
