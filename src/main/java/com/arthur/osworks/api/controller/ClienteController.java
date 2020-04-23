@@ -1,34 +1,80 @@
 package com.arthur.osworks.api.controller;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arthur.osworks.domain.model.Cliente;
+import com.arthur.osworks.domain.repository.ClienteRepository;
 
 @RestController
+@RequestMapping("/clientes")
 public class ClienteController {
 
-	@GetMapping("/clientes")
-	public List<Cliente> listar() {
-	var cliente1 = new Cliente();
-	var cliente2 = new Cliente();
-	
-	cliente1.setId(1L);
-	cliente1.setNome("Arthur V");
-	cliente1.setTelefone("81 9 9411-9930");
-	cliente1.setEmail("arthur@gmil.com");
+	@Autowired
+	private ClienteRepository clienteRepository;
 
-	cliente2.setId(2L);
-	cliente2.setNome("Álvaro E");
-	cliente2.setTelefone("81 9 9412-9940");
-	cliente2.setEmail("alvaro@gmil.com");
-	
-	return Arrays.asList(cliente1, cliente2);
-	
-	
+	@GetMapping
+	public List<Cliente> listar() {
+		return clienteRepository.findAll();
+		// return clienteRepository.findByNome("Arthur"); Método que buscar por nome junto com o do repository
+		// return clienteRepository.findByNomeContaining("Ar"); Método que busca contendo o Ar do nome
 	}
-	
+
+	@GetMapping("/{clienteId}")
+	public ResponseEntity<Cliente> buscar(@PathVariable Long clienteId) {
+		Optional<Cliente> cliente = clienteRepository.findById(clienteId);
+
+		if (cliente.isPresent()) {
+			return ResponseEntity.ok(cliente.get()); // Tratando erro caso o id do cliente não exista colocando código
+														// de status no cabeçalho da resposta 404
+		}
+		return ResponseEntity.notFound().build(); // Retorna apenas 404 sem corpo nenhum
+
+	}
+
+	// Cadastro de um cliente
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED) // Retornando o cabeçalho de created 201
+	public Cliente adicionar(@RequestBody Cliente cliente) {
+		return clienteRepository.save(cliente);
+	}
+
+	@PutMapping("/{clienteId}")
+	public ResponseEntity<Cliente> atualizar(@PathVariable Long clienteId, @RequestBody Cliente cliente) {
+
+		if (!clienteRepository.existsById(clienteId)) {
+			return ResponseEntity.notFound().build();
+		}
+		cliente.setId(clienteId);
+		cliente = clienteRepository.save(cliente);
+
+		return ResponseEntity.ok(cliente);
+
+	}
+
+	@DeleteMapping("/{clienteId}")
+	public ResponseEntity<Void> remover(@PathVariable Long clienteId) {
+
+		if (!clienteRepository.existsById(clienteId)) {
+			return ResponseEntity.notFound().build();
+		}
+
+		clienteRepository.deleteById(clienteId);
+
+		return ResponseEntity.noContent().build();
+	}
+
 }
