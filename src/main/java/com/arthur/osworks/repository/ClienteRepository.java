@@ -1,4 +1,4 @@
-package com.arthur.osworks.domain.repository;
+package com.arthur.osworks.repository;
 
 import java.util.List;
 

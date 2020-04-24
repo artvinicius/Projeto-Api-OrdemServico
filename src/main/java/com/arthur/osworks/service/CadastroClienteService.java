@@ -1,7 +1,7 @@
 package com.arthur.osworks.service;
 
 import com.arthur.osworks.domain.model.Cliente;
-import com.arthur.osworks.domain.repository.ClienteRepository;
+import com.arthur.osworks.repository.ClienteRepository;
 import com.arthur.osworks.exception.NegocioException;
 
 import org.springframework.beans.factory.annotation.Autowired;

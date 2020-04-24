@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arthur.osworks.domain.model.Cliente;
-import com.arthur.osworks.domain.repository.ClienteRepository;
+import com.arthur.osworks.repository.ClienteRepository;
 import com.arthur.osworks.service.CadastroClienteService;
 
 @RestController
