@@ -3,7 +3,11 @@ package com.arthur.osworks.api.exceptionhandler;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 //Criação da classe para passar o Status, data e titulo da Exception
+@JsonInclude(Include.NON_NULL) // Só incluir campos que não estejão null 
 public class Problema {
 
     private Integer status;
