@@ -10,9 +10,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 
 @Entity
 public class OrdemServico {
@@ -20,11 +26,17 @@ public class OrdemServico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
+    @Valid //Validando o cascatiamento da validação, validando as propiedades que estão em cliente
+    @ConvertGroup(from = Default.class, to = ValidationGroups.ClienteId.class) // Criando um novo validationgrup que sempre é default para o outro convertendo para o ValidationGroups
+    @NotNull
     @ManyToOne  //Muitas ordem de serviço possue um cliente
     private Cliente cliente;
 
+    @NotBlank
     private String descricao;
+
+    @NotNull
     private BigDecimal preco;
 
     @JsonProperty(access = Access.READ_ONLY)

@@ -2,6 +2,8 @@ package com.arthur.osworks.api.controller;
 
 
 
+import javax.validation.Valid;
+
 import com.arthur.osworks.domain.model.OrdemServico;
 import com.arthur.osworks.service.GestaoOrdemServicoService;
 
@@ -22,7 +24,7 @@ public class OrdemServicoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-   public OrdemServico criar(@RequestBody OrdemServico ordemServico){
+   public OrdemServico criar(@Valid @RequestBody OrdemServico ordemServico){
        return gestaoOrdemServico.criar(ordemServico);
    }
 
