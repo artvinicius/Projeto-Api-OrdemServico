@@ -2,6 +2,7 @@ package com.arthur.osworks.api.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -38,13 +39,13 @@ public class OrdemServicoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrdemServico criar(@Valid @RequestBody OrdemServico ordemServico) {
-        return gestaoOrdemServico.criar(ordemServico);
+    public OrdemServicoModel criar(@Valid @RequestBody OrdemServico ordemServico) {
+        return toModel(gestaoOrdemServico.criar(ordemServico));
     }
 
     @GetMapping
-    public List<OrdemServico> listar() {
-        return ordemServicoRepository.findAll();
+    public List<OrdemServicoModel> listar() {
+        return toCollectionModel(ordemServicoRepository.findAll()) ;
 
     }
 
@@ -62,6 +63,12 @@ public class OrdemServicoController {
 
     private OrdemServicoModel toModel(OrdemServico ordemServico){
         return modelMapper.map(ordemServico, OrdemServicoModel.class);
+    }
+
+    private List<OrdemServicoModel> toCollectionModel(List<OrdemServico> ordensServicos){
+        return ordensServicos.stream()
+        .map(ordemServico -> toModel(ordemServico))
+        .collect(Collectors.toList());
     }
 
 }
