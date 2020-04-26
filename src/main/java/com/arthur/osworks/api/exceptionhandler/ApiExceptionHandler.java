@@ -3,6 +3,7 @@ package com.arthur.osworks.api.exceptionhandler;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
+import com.arthur.osworks.exception.EntidadeNaoEncontradaException;
 import com.arthur.osworks.exception.NegocioException;
 
 import org.springframework.http.HttpHeaders;
@@ -18,6 +19,18 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler { // Para simplificar os erros que mostra ao cliente porem precisa tratar
+
+    @ExceptionHandler(EntidadeNaoEncontradaException.class)
+    public ResponseEntity<Object> handleEntidadeNaoEncontrada(NegocioException ex, WebRequest request) {
+       
+        var status = HttpStatus.NOT_FOUND; 
+        var problema = new Problema();
+        problema.setStatus(status.value());
+        problema.setTitulo(ex.getMessage());
+        problema.setDataHora(OffsetDateTime.now());
+
+        return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+    }
 
     @ExceptionHandler(NegocioException.class)
     public ResponseEntity<Object> handleNegocio(NegocioException ex, WebRequest request) {

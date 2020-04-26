@@ -6,6 +6,7 @@ import com.arthur.osworks.api.model.Comentario;
 import com.arthur.osworks.domain.model.Cliente;
 import com.arthur.osworks.domain.model.OrdemServico;
 import com.arthur.osworks.domain.model.StatusOrdemServico;
+import com.arthur.osworks.exception.EntidadeNaoEncontradaException;
 import com.arthur.osworks.exception.NegocioException;
 import com.arthur.osworks.repository.ClienteRepository;
 import com.arthur.osworks.repository.ComentarioRepository;
@@ -39,7 +40,7 @@ public class GestaoOrdemServicoService {
 
     public Comentario adicionarComentario(Long ordemServicoId, String descricao) {
         OrdemServico ordemServico = ordemServicoRepository.findById(ordemServicoId)
-                .orElseThrow(() -> new NegocioException("Ordem de serviço não encontrada"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Ordem de serviço não encontrada"));
 
         Comentario comentario = new Comentario();
         comentario.setDataEnvio(OffsetDateTime.now());
