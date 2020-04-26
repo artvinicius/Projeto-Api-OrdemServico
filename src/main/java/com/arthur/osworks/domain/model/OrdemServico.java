@@ -2,6 +2,8 @@ package com.arthur.osworks.domain.model;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,7 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
+import com.arthur.osworks.api.model.Comentario;
 
 @Entity
 public class OrdemServico {
@@ -18,31 +22,36 @@ public class OrdemServico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    //CÓDIGOS COMITADOS POIS NA OrdemServicoInput que é o padrão DTO foi anotado
-    
-    //@Valid //Validando o cascatiamento da validação, validando as propiedades que estão em cliente
-    //@ConvertGroup(from = Default.class, to = ValidationGroups.ClienteId.class) // Criando um novo validationgrup que sempre é default para o outro convertendo para o ValidationGroups
-    //@NotNull
-    @ManyToOne  //Muitas ordem de serviço possue um cliente
+
+    // CÓDIGOS COMITADOS POIS NA OrdemServicoInput que é o padrão DTO foi anotado
+
+    // @Valid //Validando o cascatiamento da validação, validando as propiedades que
+    // estão em cliente
+    // @ConvertGroup(from = Default.class, to = ValidationGroups.ClienteId.class) //
+    // Criando um novo validationgrup que sempre é default para o outro convertendo
+    // para o ValidationGroups
+    // @NotNull
+    @ManyToOne // Muitas ordem de serviço possue um cliente
     private Cliente cliente;
 
-    //@NotBlank
+    // @NotBlank
     private String descricao;
 
-    //@NotNull
+    // @NotNull
     private BigDecimal preco;
 
-    //@JsonProperty(access = Access.READ_ONLY)
+    // @JsonProperty(access = Access.READ_ONLY)
     @Enumerated(EnumType.STRING) // Esta armazendando String da enum StatusOrdemServico
     private StatusOrdemServico status;
-    //@JsonProperty(access = Access.READ_ONLY)
+    // @JsonProperty(access = Access.READ_ONLY)
     private OffsetDateTime dataAbertura;
-    //@JsonProperty(access = Access.READ_ONLY)
+    // @JsonProperty(access = Access.READ_ONLY)
     private OffsetDateTime dataFinalizacao;
 
+    @OneToMany(mappedBy = "ordemServico")
+    private List<Comentario> comentarios = new ArrayList<>(); // Muitos comentarios tem uma ordem de servico
 
-
+    
     public Long getId() {
         return id;
     }
@@ -122,6 +131,14 @@ public class OrdemServico {
         } else if (!id.equals(other.id))
             return false;
         return true;
+    }
+
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
     }
 
 }
