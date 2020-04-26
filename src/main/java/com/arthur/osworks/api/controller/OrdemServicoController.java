@@ -53,11 +53,15 @@ public class OrdemServicoController {
         Optional<OrdemServico> ordemServico = ordemServicoRepository.findById(ordemServicoId);
 
         if (ordemServico.isPresent()) {
-           OrdemServicoModel ordemServicoModel = modelMapper.map(ordemServico.get(), OrdemServicoModel.class);
+           OrdemServicoModel ordemServicoModel = toModel(ordemServico.get());
             return ResponseEntity.ok(ordemServicoModel);
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    private OrdemServicoModel toModel(OrdemServico ordemServico){
+        return modelMapper.map(ordemServico, OrdemServicoModel.class);
     }
 
 }
