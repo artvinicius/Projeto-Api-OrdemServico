@@ -1,6 +1,6 @@
 package com.arthur.osworks.service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import com.arthur.osworks.domain.model.Cliente;
 import com.arthur.osworks.domain.model.OrdemServico;
@@ -27,7 +27,7 @@ public class GestaoOrdemServicoService {
 
         ordemServico.setCliente(cliente);
         ordemServico.setStatus(StatusOrdemServico.ABERTA);
-        ordemServico.setDataAbertura(LocalDateTime.now());
+        ordemServico.setDataAbertura(OffsetDateTime.now());
 
         return ordemServicoRepository.save(ordemServico);
     }

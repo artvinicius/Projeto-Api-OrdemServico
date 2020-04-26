@@ -1,13 +1,10 @@
 package com.arthur.osworks.api.exceptionhandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
-import com.arthur.osworks.domain.model.Cliente;
 import com.arthur.osworks.exception.NegocioException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +26,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler { // Par
         var problema = new Problema();
         problema.setStatus(status.value());
         problema.setTitulo(ex.getMessage());
-        problema.setDataHora(LocalDateTime.now());
+        problema.setDataHora(OffsetDateTime.now());
 
         return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
     }
@@ -51,7 +48,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler { // Par
         var problema = new Problema();
         problema.setStatus(status.value());
         problema.setTitulo("Um ou mais campos então invalidos. " + "Faça o preenchimento correto e tente novamente");
-        problema.setDataHora(LocalDateTime.now());
+        problema.setDataHora(OffsetDateTime.now());
         problema.setCampo(campo);
 
         return super.handleExceptionInternal(ex, problema, headers, status, request);
