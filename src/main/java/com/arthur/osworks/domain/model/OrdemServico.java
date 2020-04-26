@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.arthur.osworks.api.model.Comentario;
+import com.arthur.osworks.exception.NegocioException;
 
 @Entity
 public class OrdemServico {
@@ -51,7 +52,6 @@ public class OrdemServico {
     @OneToMany(mappedBy = "ordemServico")
     private List<Comentario> comentarios = new ArrayList<>(); // Muitos comentarios tem uma ordem de servico
 
-    
     public Long getId() {
         return id;
     }
@@ -139,6 +139,23 @@ public class OrdemServico {
 
     public void setComentarios(List<Comentario> comentarios) {
         this.comentarios = comentarios;
+    }
+
+    public boolean podeSerFinalizada() {
+        return StatusOrdemServico.ABERTA.equals(getStatus());
+    }
+
+    public boolean naoPodeSerFinalizada(){
+        return !podeSerFinalizada();
+    }
+
+    public void finalizar() {
+        if (naoPodeSerFinalizada()) {
+            throw new NegocioException("Ordem de serviço não pode ser finalizda");
+        }
+
+        setStatus(StatusOrdemServico.FINALIZADA);
+        setDataFinalizacao(OffsetDateTime.now());
     }
 
 }
