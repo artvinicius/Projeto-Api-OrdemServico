@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.arthur.osworks.api.model.OrdemServicoInput;
 import com.arthur.osworks.api.model.OrdemServicoModel;
 import com.arthur.osworks.domain.model.OrdemServico;
 import com.arthur.osworks.repository.OrdemServicoRepository;
@@ -39,7 +40,9 @@ public class OrdemServicoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrdemServicoModel criar(@Valid @RequestBody OrdemServico ordemServico) {
+    public OrdemServicoModel criar(@Valid @RequestBody OrdemServicoInput ordemServicoInput) { //Entrada de dados
+        OrdemServico ordemServico = toEntity(ordemServicoInput); //Convertendo OrdemServicoInput em uma entidade que é OrdemSevico
+
         return toModel(gestaoOrdemServico.criar(ordemServico));
     }
 
@@ -69,6 +72,10 @@ public class OrdemServicoController {
         return ordensServicos.stream()
         .map(ordemServico -> toModel(ordemServico))
         .collect(Collectors.toList());
+    }
+
+    private OrdemServico toEntity(OrdemServicoInput ordemServicoInput){
+        return modelMapper.map(ordemServicoInput, OrdemServico.class);
     }
 
 }
